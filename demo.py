@@ -18,22 +18,26 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Start recording
-audio = audiorecorder("Click to record", "Click to stop recording")
+# Sidebar
+with st.sidebar:
+    st.title("Sidebar")
+    
+    # Start recording
+    audio = audiorecorder("Click to record", "Click to stop recording")
 
-prompt = None
+    prompt = None
 
-# Check if audio is recorded
-if len(audio) > 0:
-    # To save audio to a file, use pydub export method:
-    audio.export("audio.wav", format="wav")
+    # Check if audio is recorded
+    if len(audio) > 0:
+        # To save audio to a file, use pydub export method:
+        audio.export("audio.wav", format="wav")
 
-    # Transcribe the audio
-    stt = NaverSTT()
-    transcribed_text = stt.transcribe("audio.wav")
+        # Transcribe the audio
+        stt = NaverSTT()
+        transcribed_text = stt.transcribe("audio.wav")
 
-    # Use the transcribed text as a prompt (I'm assuming you are trying to slice the result to get meaningful content)
-    prompt = transcribed_text[9:-2]
+        # Use the transcribed text as a prompt (I'm assuming you are trying to slice the result to get meaningful content)
+        prompt = transcribed_text[9:-2]
 
 # Always show the chat input field, regardless of recording
 typed_input = st.chat_input("What is up?")

@@ -1,13 +1,8 @@
 import openai
 import streamlit as st
 from audiorecorder import audiorecorder
-from voice.tts import GalaxyTutorial
+from voice.tts import GalaxyTutorial  # Not used in this code snippet
 from voice.stt import NaverSTT
-
-
-
-audio = audiorecorder("Click to record", "Click to stop recording")
-
 
 st.title("디지털 문화센터에 오신 것을 환영합니다")
 
@@ -23,11 +18,13 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+# Start recording
+audio = audiorecorder("Click to record", "Click to stop recording")
 
+prompt = None
+
+# Check if audio is recorded
 if len(audio) > 0:
-    # To play audio in frontend:
-    st.audio(audio.export().read())  
-
     # To save audio to a file, use pydub export method:
     audio.export("audio.wav", format="wav")
 
@@ -35,14 +32,15 @@ if len(audio) > 0:
     stt = NaverSTT()
     transcribed_text = stt.transcribe("audio.wav")
 
-    # Use the transcribed text as a prompt
-    prompt = transcribed_text
+    # Use the transcribed text as a prompt (I'm assuming you are trying to slice the result to get meaningful content)
+    prompt = transcribed_text[9:-2]
 
-else:
-    prompt = st.chat_input("What is up?")
+# Always show the chat input field, regardless of recording
+typed_input = st.chat_input("What is up?")
+if typed_input:
+    prompt = typed_input
 
-
-
+# Process the prompt
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):

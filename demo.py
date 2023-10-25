@@ -4,7 +4,25 @@ from audiorecorder import audiorecorder
 from voice.tts import GalaxyTutorial
 from voice.stt import NaverSTT
 
-st.title("디지털 문화센터에 오신 것을 환영합니다")
+# Styling
+st.markdown("""
+<style>
+    .reportview-container {
+        background-color: #f4f4f4;
+    }
+    .chat-message.user {
+        background-color: #FFDDC1;
+    }
+    .chat-message.assistant {
+        background-color: #C1FFD7;
+    }
+    .sidebar .block-container {
+        background-color: #FFF5E1;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.title("디지털 문화센터")
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -22,11 +40,11 @@ for message in st.session_state.messages:
 
 # Sidebar
 with st.sidebar:
-    st.title("Sidebar")
+    st.title("🔧 설정")
     
     # Start recording
-    audio = audiorecorder("Click to record", "Click to stop recording")
-
+    audio = audiorecorder("🎙️ Click to record", "🛑 Click to stop recording")
+    
     prompt = None
 
     # Check if audio is recorded
@@ -72,8 +90,3 @@ if prompt:
     tutorial = GalaxyTutorial()
     audio_data = tutorial.generate_audio(full_response)  # Convert the text response to audio
     st.audio(audio_data, format='audio/wav')  # Play the audio in Streamlit
-
-
-
-
-

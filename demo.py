@@ -12,11 +12,13 @@ if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    # Initialize with a system prompt
+    st.session_state.messages = [{"role": "system", "content": "너는 어르신을 상대하는 챗봇이야. 지루하지 않게 대화를 계속 이어나가줘."}]
 
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    if message["role"] != "system":  # Skip the system messages
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
 # Sidebar
 with st.sidebar:

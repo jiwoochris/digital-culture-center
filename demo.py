@@ -1,7 +1,7 @@
 import openai
 import streamlit as st
 from audiorecorder import audiorecorder
-from voice.tts import GalaxyTutorial  # Not used in this code snippet
+from voice.tts import GalaxyTutorial
 from voice.stt import NaverSTT
 
 st.title("디지털 문화센터에 오신 것을 환영합니다")
@@ -36,7 +36,7 @@ with st.sidebar:
         stt = NaverSTT()
         transcribed_text = stt.transcribe("audio.wav")
 
-        # Use the transcribed text as a prompt (I'm assuming you are trying to slice the result to get meaningful content)
+        # Use the transcribed text as a prompt
         prompt = transcribed_text[9:-2]
 
 # Always show the chat input field, regardless of recording
@@ -65,3 +65,13 @@ if prompt:
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+    # Convert the assistant's response to audio
+    tutorial = GalaxyTutorial()
+    audio_data = tutorial.generate_audio(full_response)  # Convert the text response to audio
+    st.audio(audio_data, format='audio/wav')  # Play the audio in Streamlit
+
+
+
+
+
